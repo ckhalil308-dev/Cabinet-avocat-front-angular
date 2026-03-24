@@ -1,0 +1,92 @@
+<div class="min-h-screen flex items-center justify-center bg-[#f8fafc] font-sans py-16 px-6">
+  <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute -right-20 top-0 h-full w-1/4 bg-slate-200/20 skew-x-[-10deg] transform"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-2xl bg-white p-10 md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.03)] border border-slate-100">
+    
+    <div class="mb-12 text-left">
+      <h2 class="text-[10px] tracking-[0.5em] uppercase text-slate-400 mb-4">Ouverture de Dossier Numérique</h2>
+      <h1 class="text-3xl font-light text-slate-900">
+        Cabinet <span class="font-semibold italic text-[#1e293b]">Mahassen Saïdane</span>
+      </h1>
+      <div class="h-[1px] w-16 bg-slate-200 mt-6"></div>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+      
+      <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Prénom</label>
+        <input 
+          formControlName="prenom"
+          type="text" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('prenom')?.touched && registerForm.get('prenom')?.invalid}"
+        >
+      </div>
+
+      <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Nom</label>
+        <input 
+          formControlName="nom"
+          type="text" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('nom')?.touched && registerForm.get('nom')?.invalid}"
+        >
+      </div>
+
+      <div class="group relative md:col-span-2">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Adresse Email Professionnelle</label>
+        <input 
+          formControlName="email"
+          type="email" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('email')?.touched && registerForm.get('email')?.invalid}"
+        >
+      </div>
+
+      <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Téléphone</label>
+        <input 
+          formControlName="numTelephone"
+          type="tel" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('numTelephone')?.touched && registerForm.get('numTelephone')?.invalid}"
+        >
+      </div>
+
+      <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Mot de passe</label>
+        <input 
+          formControlName="motDePasse"
+          type="password" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('motDePasse')?.touched && registerForm.get('motDePasse')?.invalid}"
+        >
+      </div>
+       <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-medium">Confirmer le mot de passe</label>
+        <input 
+          formControlName="confirmerMotDePasse"
+          type="password" 
+          class="w-full bg-transparent border-b border-slate-200 py-2 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-light"
+          [ngClass]="{'border-red-400': registerForm.get('confirmerMotDePasse')?.touched && registerForm.get('confirmerMotDePasse')?.invalid}"
+        >
+      </div>
+      
+
+      <div class="md:col-span-2 pt-6">
+        <button 
+          type="submit"
+          class="w-full py-5 bg-[#0f172a] text-white text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-slate-800 transition-all duration-300 shadow-xl shadow-slate-200"
+        >
+          Valider l'inscription
+        </button>
+      </div>
+      <p class="text-[11px] text-center  text-slate-600">Deja inscrit ?
+        <a href="/login" class="ml-2 text-[14px]  tracking-widest text-slate-700 hover:text-slate-900 transition-colors">retourner</a>
+      </p>
+
+    </form>
+  </div>
+</div>
