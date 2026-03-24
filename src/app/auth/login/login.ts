@@ -1,32 +1,38 @@
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil, timeout } from 'rxjs/operators';
 import { ServiceAuth } from '../../service/service-auth';
-
+import { LoginInt } from '../../interfaces/loginInt';
+import { Authresponse } from '../../interfaces/authresponse';
+import { ErrorInterface } from '../../interfaces/error';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
-  error: boolean = false;
+  error: string = '';
   isLoading = false;
-  private fb: FormBuilder = inject(FormBuilder);
-  private  authService: ServiceAuth =inject(ServiceAuth)
-   private router: Router=inject(Router);
-   
+
+  private fb = inject(FormBuilder);
+  private authService :ServiceAuth = inject(ServiceAuth);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private destroy$ = new Subject<void>();
+  private errorTimeout: any;
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      motDePasse: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -35,26 +41,67 @@ export class LoginComponent implements OnInit {
       this.loginForm.markAllAsTouched();
       return;
     }
-    
-    this.isLoading = true;
-    this.error = false;
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        console.log('Login successful', res);
-        localStorage.setItem('token', res.Token);
-        this.loginForm.reset();
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        console.error('Login failed', err?.error);
-        this.error = true;
-        setTimeout(() => {
-          this.error = false;
-        }, 5000);
-      }
-    });
+    this.isLoading = true;
+    this.error = '';
+    this.cdr.markForCheck();
+
+    const credentials: LoginInt = this.loginForm.value;
+
+    this.authService.login(credentials)
+      .pipe(
+        timeout(10000), 
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (res: Authresponse) => {
+          this.isLoading = false;
+          this.error = '';
+          this.cdr.markForCheck();
+          
+          alert("Bonjour " + res.nom + " vous êtes connecté en tant que " + res.role);
+          console.log('Login successful', res);
+          localStorage.setItem('token', res.Token);
+          this.loginForm.reset();
+          // this.router.navigate(['/dashboard']);
+        },
+        error: (err: any) => {
+          console.error('Login failed:', err);
+          
+          this.isLoading = false;
+          
+     
+          if (this.errorTimeout) {
+            clearTimeout(this.errorTimeout);
+          }
+          
+          if (err.name === 'TimeoutError') {
+            this.error = 'La connexion a dépassé le délai imparti. Veuillez réessayer.';
+          } else {
+            const errorResponse: ErrorInterface= err?.error;
+            
+            this.error = errorResponse?.message || 
+              err?.message || 
+              err?.statusText || 
+              'une erreur est survenue lors de la connexion';
+          }
+          
+          this.cdr.markForCheck();
+          
+          this.errorTimeout = setTimeout(() => {
+            this.error = '';
+            this.cdr.markForCheck();
+          }, 5000);
+        }
+      });
+      };
+  
+
+  ngOnDestroy(): void {
+    if (this.errorTimeout) {
+      clearTimeout(this.errorTimeout);
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
