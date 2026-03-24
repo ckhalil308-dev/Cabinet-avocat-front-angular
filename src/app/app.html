@@ -1,2 +1,10 @@
+@if (user$ | async; as client) {
+   <router-outlet></router-outlet>
+}
+@else {
 <app-nav></app-nav>
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+  
+
+}
+

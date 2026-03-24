@@ -2,11 +2,45 @@
     import { Accueil } from './home/accueil/accueil';
     import {  LoginComponent } from './auth/login/login';
     import { Register } from './auth/register/register';
+import { guestGuard } from './guards/publicguards-guard';
+import { roleGuard } from './guards/privateguards-guard';
+import { Role } from './enums/role.enum';
+import { DashClient } from './client/dash-client/dash-client';
+import { NavbarClient } from './client/navbar-client/navbar-client';
+import { NavbarSecretaire } from './secretaire/navbar-secretaire/navbar-secretaire';
+import { DashSecretaire } from './secretaire/dash-secretaire/dash-secretaire';
+import { Calendrier } from './secretaire/calendrier/calendrier';
 
     export const routes: Routes = [
-        { path:"home", title:"Home" , component:Accueil}
+        { path:"home", title:"Home" , component:Accueil ,}
         ,
-        { path:"login", title:"Login" ,component:LoginComponent} ,
-        { path:"register", title:"Register" ,component:Register} ,
+        { path:"login", title:"Login" ,component:LoginComponent ,canActivate:[guestGuard]} ,
+        { path:"register", title:"Register" ,component:Register,canActivate:[guestGuard]} ,
+        {
+        path: "client",
+        component:NavbarClient, 
+       canActivate: [roleGuard], 
+        data: { roles: [Role.CLIENT] }, 
+       children: [
+      { path: "", redirectTo: "dashboard", pathMatch: "full" }, 
+      { path: "dashboard", title: "Mon Dashboard", component:DashClient  },
+    //   { path: "audiences", title: "Mes Audiences", component: MesAudiencesComponent },
+    //   { path: "rdv", title: "Mes Rendez-vous", component: MesRdvComponent },
+    ]
+  },
+  {
+    path: "secretaire",
+       component:NavbarSecretaire, 
+       canActivate: [roleGuard], 
+        data: { roles: [Role.SECRETAIRE] }, 
+       children: [
+      
+      { path: "dashboard", title: "Mon Dashboard", component:DashSecretaire },
+      { path: "calendrier", title: "Mon Calendrier", component:Calendrier },
+      { path: "", redirectTo: "dashboard", pathMatch: "full" }
+       ]
+    
+    },
         { path:"", redirectTo:"home", pathMatch:"full" }
+
     ];

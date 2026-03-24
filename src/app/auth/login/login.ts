@@ -8,6 +8,7 @@ import { ServiceAuth } from '../../service/service-auth';
 import { LoginInt } from '../../interfaces/loginInt';
 import { Authresponse } from '../../interfaces/authresponse';
 import { ErrorInterface } from '../../interfaces/error';
+import { ServiceUser } from '../../service/service-user';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
 
   private fb = inject(FormBuilder);
+  private userService:ServiceUser = inject(ServiceUser);
   private authService :ServiceAuth = inject(ServiceAuth);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -58,12 +60,25 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.error = '';
           this.cdr.markForCheck();
-          
-          alert("Bonjour " + res.nom + " vous êtes connecté en tant que " + res.role);
           console.log('Login successful', res);
           localStorage.setItem('token', res.Token);
+          this.userService.getMe().subscribe({
+          next: (client) => {
+          console.log('Contexte chargé pour :', client.nom);
+          if(client.role === 'CLIENT') {
+            this.router.navigate(['/client']);
+          } 
+          else if(client.role === 'SECRETAIRE') {
+            this.router.navigate(['/secretaire']);
+          }
+          console.log(' l\'utilisateur :', this.userService.getCurrentUser());
+            },
+            error: (err) => {
+              console.error('Erreur lors du chargement du contexte utilisateur :', err);}
+             
+          });
           this.loginForm.reset();
-          // this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home'], { replaceUrl: true });
         },
         error: (err: any) => {
           console.error('Login failed:', err);
