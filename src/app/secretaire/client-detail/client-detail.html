@@ -59,81 +59,86 @@
           <span>Nouvelle affaire</span>
         </button>
       </div>
+      
 
       @if (affaireClient && affaireClient.length > 0) {
         <div class="grid grid-cols-1 gap-6">
           @for (affaire of affaireClient; track affaire.id) {
-            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row">
-             
-              <div class="p-8 md:w-1/2 border-b md:border-b-0 md:border-r border-slate-50">
-                <div class="flex items-center justify-between mb-6">
+     <div class="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row">
+  
+  <div class="p-8 md:w-1/2 border-b md:border-b-0 md:border-r border-slate-50">
+    <div class="flex items-center justify-between mb-6">
+      <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"
+        [ngClass]="{
+          'bg-green-50 text-green-600 border border-green-100': affaire.statut === 'GAGNEE',
+          'bg-red-50 text-red-500 border border-red-100':       affaire.statut === 'PERDUE',
+          'bg-amber-50 text-amber-500 border border-amber-100': affaire.statut === 'EN_COURS'
+        }">
+        ● {{ affaire.statut }}
+      </span>
+      <p><span class="text-[15px] font-bold font-mono text-slate-500">Num dossier: </span> {{ affaire.numeroDossier }}</p> 
+    </div>
 
-                  <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"
-                    [ngClass]="{
-                      'bg-green-50 text-green-600 border border-green-100': affaire.statut === 'GAGNEE',
-                      'bg-red-50 text-red-500 border border-red-100':       affaire.statut === 'PERDUE',
-                      'bg-amber-50 text-amber-500 border border-amber-100': affaire.statut === 'EN_COURS'
-                    }">
-                    ● {{ affaire.statut }}
-                  </span>
-                   <p ><span class="text-[15px] text-bold font-mono text-slate-500">Num dossier: </span> {{ affaire.numeroDossier }}</p> 
-                </div>
+    <h3 class="text-2xl font-serif text-slate-900 mb-4">{{ affaire.titre }}</h3>
 
-                <h3 class="text-2xl font-serif  text-slate-900 mb-4">{{ affaire.titre }}</h3>
-                <div class="flex items-center space-x-2 mb-4">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-amber-500">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+    <div class="flex items-center space-x-2 mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-amber-500">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+      </svg>
+      <h3 class="text-sm italic text-slate-900">
+        {{ affaire.dateOuverture | date:'dd / MM / yyyy' }}
+      </h3>
+    </div>
+
+    <div>
+      <p class="text-sm font-bold leading-relaxed mb-1 font-serif">Description: </p>
+      <p class="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-2">
+        {{ affaire.description || 'Aucune description détaillée disponible pour cette affaire.' }}
+      </p>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <button (click)="openEditModal(affaire)"
+        class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors flex items-center space-x-1">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+        </svg>
+        <span>Modifier</span>
+      </button>
+      <span class="text-slate-200">|</span>
+      <button (click)="deleteAffaire(affaire.id)"
+        class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors flex items-center space-x-1">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        <span>Supprimer</span>
+      </button>
+     <a [routerLink]="['/secretaire/affaires', clientId,affaire.id]"
+   class="inline-flex items-center px-6 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 shadow-sm shadow-slate-100 group">
+  <span>Consulter les détails</span>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
   </svg>
+</a>
+    </div>
+  </div>
 
-         <h3 class="text-sm italic text-slate-900">
-    {{ affaire.dateOuverture | date:'dd / MM / yyyy' }}
-  </h3>
-</div>          <div>
-                 <p class="text-sm font-bold leading-relaxed mb-3 line-clamp-2 font-serif ">Description: </p>
-                 <p class="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-2">
-                  {{ affaire.description || 'Aucune description détaillée disponible pour cette affaire.' }}
-                </p>
-                </div>
+  <div class="p-8 md:w-1/2 bg-slate-50/50 flex flex-col justify-center">
+    <div class="flex items-center justify-between mb-4">
+      <h4 class="text-[9px] font-black uppercase tracking-widest text-slate-400 flex items-center">
+        <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/>
+        </svg>
+        Audiences & Événements
+      </h4>
+    </div>
+    <div class="border-2 border-dashed border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-white/50">
+      <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Aucune audience</p>
+      <p class="text-[9px] text-slate-400 italic font-serif">Le calendrier des audiences sera affiché ici prochainement.</p>
+    </div>
+  </div>
 
-                <!-- Action buttons -->
-                <div class="flex items-center space-x-4">
-                  <button (click)="openEditModal(affaire)"
-                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors flex items-center space-x-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                    </svg>
-                    <span>Modifier</span>
-                  </button>
-                  <span class="text-slate-200">|</span>
-                  <button (click)="deleteAffaire(affaire.id)"
-                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors flex items-center space-x-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                    <span>Supprimer</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="p-8 md:w-1/2 bg-slate-50/50 flex flex-col justify-center">
-                <div class="flex items-center justify-between mb-4">
-                  <h4 class="text-[9px] font-black uppercase tracking-widest text-slate-400 flex items-center">
-                    <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/>
-                    </svg>
-                    Audiences & Événements
-                  </h4>
-                </div>
-                <div class="border-2 border-dashed border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-white/50">
-                  <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Aucune audience</p>
-                  <p class="text-[9px] text-slate-400 italic font-serif">Le calendrier des audiences sera affiché ici prochainement.</p>
-                  <button class="mt-4 px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all">
-                    + Planifier
-                  </button>
-                </div>
-              </div>
-
-            </div>
+</div>
           }
         </div>
 
@@ -177,9 +182,6 @@
             </svg>
           </button>
         </div>
-       
-
-        <!-- Form -->
         <form [formGroup]="affaireForm" (ngSubmit)="submitAffaire()" class="p-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 

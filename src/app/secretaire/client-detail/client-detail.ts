@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServiceUser } from '../../service/service-user';
 import { Client } from '../../interfaces/client';
@@ -9,11 +9,12 @@ import { AffaireRes } from '../../interfaces/affaire-res';
 import { AffaireReq } from '../../interfaces/affaire-req';
 import { forkJoin } from 'rxjs';
 import { StatusAffaire } from '../../enums/status-affaire';
+import { Uneaffaire } from "../Uneaffaire/Uneaffaire";
 
 @Component({
   selector: 'app-client-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Uneaffaire, RouterLink],
   templateUrl: './client-detail.html',
   styleUrl: './client-detail.css',
 })
@@ -37,7 +38,7 @@ export class CLientDetail implements OnInit {
   statusOptions = Object.values(StatusAffaire);
 
   affaireForm!: FormGroup;
-  private clientId!: number;
+   clientId!: number;
 
   ngOnInit(): void {
     this.clientId = Number(this.activatedRoute.snapshot.params['id']);
@@ -77,7 +78,9 @@ export class CLientDetail implements OnInit {
     this.initForm();
     this.isModalOpen = true;
   }
-
+  navigate(){
+    this.router.navigate(['/secretaire/affaire']);
+  }
   openEditModal(affaire: AffaireRes): void {
     this.editingAffaireId = affaire.id;
     this.initForm(affaire);

@@ -13,6 +13,7 @@ import { Calendrier } from './secretaire/calendrier/calendrier';
 import { ListeClient } from './secretaire/liste-client/liste-client';
 import { Affaire } from './secretaire/affaire/affaire';
 import { CLientDetail } from './secretaire/client-detail/client-detail';
+import { VeriferClient } from './secretaire/verifer-client/verifer-client';
 
     export const routes: Routes = [
         { path:"home", title:"Home" , component:Accueil ,}
@@ -41,8 +42,9 @@ import { CLientDetail } from './secretaire/client-detail/client-detail';
       { path: "dashboard", title: "Mon Dashboard", component:DashSecretaire },
       { path: "calendrier", title: "Mon Calendrier", component:Calendrier },
       { path: "clients", title: "Gérer les Clients", component:ListeClient },
-      { path:"affaires", title:"Gérer les Affaires", component:Affaire},
+      { path:"affaires/:clientId/:id", title:"Gérer les Affaires", component:Affaire},
       {path:"clientDetails/:id", title:"Détails du Client", component:CLientDetail},
+        {path:"VerifierClient", title:"Détails du Client", component:VeriferClient},
       { path: "", redirectTo: "dashboard", pathMatch: "full" }
        ]
     

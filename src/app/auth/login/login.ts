@@ -81,26 +81,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/home'], { replaceUrl: true });
         },
         error: (err: any) => {
-          console.error('Login failed:', err);
-          
+          console.error('Login failed:', err.error);
+          this.cdr.markForCheck();
           this.isLoading = false;
+          this.error = err.error?.message || 'Une erreur est survenue lors de la connexion.';
           
      
-          if (this.errorTimeout) {
-            clearTimeout(this.errorTimeout);
-          }
-          
-          if (err.name === 'TimeoutError') {
-            this.error = 'La connexion a dépassé le délai imparti. Veuillez réessayer.';
-          } else {
-            const errorResponse: ErrorInterface= err?.error;
-            
-            this.error = errorResponse?.message || 
-              err?.message || 
-              err?.statusText || 
-              'une erreur est survenue lors de la connexion';
-          }
-          
+              
           this.cdr.markForCheck();
           
           this.errorTimeout = setTimeout(() => {

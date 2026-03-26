@@ -29,7 +29,7 @@ export class ListeClient implements OnInit {
   page: number = 0;
  loading: boolean = false;
   totalPages: number = 0;
-  affaireClient!:AffaireRes[]
+  
   
   private cdr = inject(ChangeDetectorRef);
     loadClients() {
