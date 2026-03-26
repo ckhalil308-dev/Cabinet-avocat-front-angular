@@ -1,9 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Client } from '../interfaces/client';
 import { Router } from '@angular/router';
+import { ApiResponse } from '../interfaces/api-response';
+import { ClientRegister } from '../interfaces/client-register';
+import { ClientReq } from '../interfaces/client-req';
 const apiUrl=environment.apiUrl+"/users";
 @Injectable({
   providedIn: 'root',
@@ -40,9 +43,37 @@ private autoLoadUser() {
     localStorage.removeItem('token');
     this.userSubject.next(null);
     this.router.navigate(['/home']);
-
+  }
+    getClientById(id: number): Observable<Client> {
+    return this.http.get<Client>(`${apiUrl}/secretaire/${id}`);
   }
 
+  getAllClients(page: number = 0, size: number = 10): Observable<Client[]> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    
+    return this.http.get<Client[]>(`${apiUrl}/secretaire/all`, { params });
+  }
+  modifierClient(id: number, clientRequest: ClientReq): Observable<Client> {
+    return this.http.put<Client>(
+      `${apiUrl}/secretaire/edit/${id}`,
+      clientRequest
+    );
+  }
+  supprimerClient(id: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${apiUrl}/secretaire/del/${id}`);
+  }
+  verifyClient(id: number): Observable<Client> {
+    return this.http.put<Client>(
+      `${apiUrl}/secretaire/verify/${id}`,
+      {}
+    );
+  }
+
+  }
+  
+
 
 
 
@@ -50,4 +81,4 @@ private autoLoadUser() {
   
 
   
-}
+

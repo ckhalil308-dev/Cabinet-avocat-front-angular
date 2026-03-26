@@ -1,0 +1,254 @@
+<div class="  max-w-7xl mx-auto py-10 px-6">
+
+  <!-- Back button -->
+  <div class="flex items-center justify-between mb-10">
+    <button (click)="goBack()" class="group flex items-center space-x-2 text-slate-400 hover:text-slate-900 transition-all">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      <span class="text-[10px] uppercase tracking-[0.2em] font-bold">Retour à la liste</span>
+    </button>
+    <span class="px-4 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-widest">
+      Fiche Client #{{ clientDetails?.id }}
+    </span>
+  </div>
+
+  @if (clientDetails) {
+
+    <!-- Client card -->
+    <div class=" reveal  bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-8">
+      <div class="h-24 bg-slate-900 flex items-end px-10 pb-4 relative">
+        <div class="absolute -bottom-8 left-10 w-20 h-20 bg-amber-500 rounded-2xl flex items-center justify-center text-white text-2xl font-serif italic shadow-xl border-4 border-white">
+          {{ clientDetails.nom[0] }}{{ clientDetails.prenom[0] }}
+        </div>
+      </div>
+      <div class="pt-12 pb-8 px-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 class="  reveal  .delay-500 text-3xl font-serif italic text-slate-900">{{ clientDetails.prenom }} {{ clientDetails.nom }}</h1>
+          <p class="text-amber-600 font-bold text-[10px] uppercase tracking-[0.3em] mt-1">Dossier {{ clientDetails.role }}</p>
+        </div>
+        <div class="flex flex-wrap gap-8">
+          <div class="flex items-center space-x-3">
+            <div class="p-2 bg-slate-50 rounded-lg">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-600">{{ clientDetails.email }}</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="p-2 bg-slate-50 rounded-lg">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-width="2"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-600">+216 {{ clientDetails.numTelephone }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Affaires section -->
+    <div class=" reveal  .delay-500 space-y-6">
+
+      <!-- Section header + add button -->
+      <div class="flex items-center justify-between px-2">
+        <h2 class="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 whitespace-nowrap">Registre des Affaires liées</h2>
+        <span class="h-px flex-1 bg-slate-100 mx-6"></span>
+        <button (click)="openCreateModal()"
+          class="flex items-center space-x-2 px-4 py-2 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-amber-500 transition-all shadow-sm whitespace-nowrap">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Nouvelle affaire</span>
+        </button>
+      </div>
+
+      @if (affaireClient && affaireClient.length > 0) {
+        <div class="grid grid-cols-1 gap-6">
+          @for (affaire of affaireClient; track affaire.id) {
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col md:flex-row">
+             
+              <div class="p-8 md:w-1/2 border-b md:border-b-0 md:border-r border-slate-50">
+                <div class="flex items-center justify-between mb-6">
+
+                  <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"
+                    [ngClass]="{
+                      'bg-green-50 text-green-600 border border-green-100': affaire.statut === 'GAGNEE',
+                      'bg-red-50 text-red-500 border border-red-100':       affaire.statut === 'PERDUE',
+                      'bg-amber-50 text-amber-500 border border-amber-100': affaire.statut === 'EN_COURS'
+                    }">
+                    ● {{ affaire.statut }}
+                  </span>
+                   <p ><span class="text-[15px] text-bold font-mono text-slate-500">Num dossier: </span> {{ affaire.numeroDossier }}</p> 
+                </div>
+
+                <h3 class="text-2xl font-serif  text-slate-900 mb-4">{{ affaire.titre }}</h3>
+                <div class="flex items-center space-x-2 mb-4">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-amber-500">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+  </svg>
+
+         <h3 class="text-sm italic text-slate-900">
+    {{ affaire.dateOuverture | date:'dd / MM / yyyy' }}
+  </h3>
+</div>          <div>
+                 <p class="text-sm font-bold leading-relaxed mb-3 line-clamp-2 font-serif ">Description: </p>
+                 <p class="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-2">
+                  {{ affaire.description || 'Aucune description détaillée disponible pour cette affaire.' }}
+                </p>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex items-center space-x-4">
+                  <button (click)="openEditModal(affaire)"
+                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors flex items-center space-x-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    <span>Modifier</span>
+                  </button>
+                  <span class="text-slate-200">|</span>
+                  <button (click)="deleteAffaire(affaire.id)"
+                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors flex items-center space-x-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    <span>Supprimer</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-8 md:w-1/2 bg-slate-50/50 flex flex-col justify-center">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="text-[9px] font-black uppercase tracking-widest text-slate-400 flex items-center">
+                    <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/>
+                    </svg>
+                    Audiences & Événements
+                  </h4>
+                </div>
+                <div class="border-2 border-dashed border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-white/50">
+                  <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Aucune audience</p>
+                  <p class="text-[9px] text-slate-400 italic font-serif">Le calendrier des audiences sera affiché ici prochainement.</p>
+                  <button class="mt-4 px-4 py-2 bg-white border border-slate-100 rounded-xl text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all">
+                    + Planifier
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+
+      } @else {
+        <div class="bg-white border-2 border-dashed border-slate-100 rounded-[3rem] p-20 flex flex-col items-center justify-center shadow-sm">
+          <div class="p-6 bg-slate-50 rounded-full mb-6">
+            <svg class="w-12 h-12 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-serif italic text-slate-400">Aucun dossier rattaché</h3>
+          <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-2 text-center">
+            Toutes les affaires juridiques de ce client apparaîtront ici.
+          </p>
+        </div>
+      }
+    </div>
+
+  } @else {
+    <div class="animate-pulse space-y-8">
+      <div class="h-40 bg-slate-100 rounded-3xl"></div>
+      <div class="h-64 bg-slate-50 rounded-[3rem]"></div>
+    </div>
+  }
+
+  <!-- Create / Edit modal — outside @if so it overlays everything -->
+  @if (isModalOpen) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4">
+      <div class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+         
+
+        <!-- Modal header — title changes based on mode -->
+        <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+         
+          <h2 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900">
+            {{ editingAffaireId !== null ? 'Modifier l\'affaire' : 'Nouvelle Affaire' }}
+          </h2>
+          <button (click)="closeModal()" class="text-slate-400 hover:text-slate-900 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+       
+
+        <!-- Form -->
+        <form [formGroup]="affaireForm" (ngSubmit)="submitAffaire()" class="p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Titre</label>
+              <input type="text" formControlName="titre" placeholder="Ex: Litige commercial..."
+                class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:border-slate-900 outline-none transition-all"
+                [class.border-red-300]="affaireForm.get('titre')?.invalid && affaireForm.get('titre')?.touched">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Numéro de Dossier</label>
+              <input type="text" formControlName="numeroDossier" placeholder="Ex: DOS-2024-001"
+                class="w-full px-4 py-2.5 text-sm font-mono bg-white border border-slate-200 rounded-xl focus:border-slate-900 outline-none transition-all"
+                [class.border-red-300]="affaireForm.get('numeroDossier')?.invalid && affaireForm.get('numeroDossier')?.touched">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date d'Ouverture</label>
+              <input type="date" formControlName="dateOuverture"
+                class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:border-slate-900 outline-none transition-all"
+                [class.border-red-300]="affaireForm.get('dateOuverture')?.invalid && affaireForm.get('dateOuverture')?.touched">
+            </div>
+           @if (error) {
+                    <div class="md:col-span-2">
+                   <p class="text-red-500 text-[11px] font-bold bg-red-50 p-2 rounded-lg border border-red-100">
+                        ⚠️ {{ error }}
+                    </p>
+                   </div>}
+
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Statut</label>
+              <select formControlName="statut"
+                class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:border-slate-900 outline-none transition-all appearance-none">
+                @for (status of statusOptions; track status) {
+                  <option [value]="status">{{ status }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="space-y-1 md:col-span-2">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Description  </label>
+              <textarea formControlName="description" rows="3" placeholder="Détails de l'affaire..."
+                class="w-full px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:border-slate-900 outline-none transition-all resize-none"
+                [class.border-red-300]="affaireForm.get('description')?.invalid && affaireForm.get('description')?.touched">
+              </textarea>
+            </div>
+
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end space-x-4">
+            <button type="button" (click)="closeModal()"
+              class="px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-all border border-transparent hover:border-slate-200 rounded-xl">
+              Annuler
+            </button>
+            <button type="submit" [disabled]="affaireForm.invalid || isSubmitting"
+              class="px-8 py-2.5 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-amber-500 disabled:bg-slate-200 disabled:text-slate-400 transition-all shadow-sm">
+              @if (isSubmitting) {
+                Enregistrement...
+              } @else {
+                {{ editingAffaireId !== null ? 'Sauvegarder' : 'Créer l\'affaire' }}
+              }
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  }
+
+</div>

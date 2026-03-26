@@ -10,6 +10,9 @@ import { NavbarClient } from './client/navbar-client/navbar-client';
 import { NavbarSecretaire } from './secretaire/navbar-secretaire/navbar-secretaire';
 import { DashSecretaire } from './secretaire/dash-secretaire/dash-secretaire';
 import { Calendrier } from './secretaire/calendrier/calendrier';
+import { ListeClient } from './secretaire/liste-client/liste-client';
+import { Affaire } from './secretaire/affaire/affaire';
+import { CLientDetail } from './secretaire/client-detail/client-detail';
 
     export const routes: Routes = [
         { path:"home", title:"Home" , component:Accueil ,}
@@ -37,6 +40,9 @@ import { Calendrier } from './secretaire/calendrier/calendrier';
       
       { path: "dashboard", title: "Mon Dashboard", component:DashSecretaire },
       { path: "calendrier", title: "Mon Calendrier", component:Calendrier },
+      { path: "clients", title: "Gérer les Clients", component:ListeClient },
+      { path:"affaires", title:"Gérer les Affaires", component:Affaire},
+      {path:"clientDetails/:id", title:"Détails du Client", component:CLientDetail},
       { path: "", redirectTo: "dashboard", pathMatch: "full" }
        ]
     

@@ -5,8 +5,8 @@ import { environment } from '../../environments/environment.development';
 import { CreneauRequest } from '../interfaces/creneau-request';
 import { CreneauResClient } from '../interfaces/creneau-res-client';
 import { CreneauResSecretaire } from '../interfaces/creneau-res-secretaire';
-import { ApiResponse } from '../interface/api-response';
-import { ModifierCreneauDto } from '../interface/modifier-creneau-dto';
+import { ApiResponse } from '../interfaces/api-response';
+import { ModifierCreneauDto } from '../interfaces/modifier-creneau-dto';
 
 
 
