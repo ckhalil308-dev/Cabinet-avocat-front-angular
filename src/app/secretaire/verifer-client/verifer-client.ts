@@ -21,7 +21,7 @@ export class VeriferClient {
   loadClients() {
       
     this.loading = true;
-    this.serviceuser.VerifClients(this.page,5).subscribe({
+    this.serviceuser.getNonVerifiedClients(this.page,5).subscribe({
       next: (data: any) => {
       this.loading = false;
       console.log('loading :', this.loading);

@@ -146,16 +146,4 @@ export class Affaire implements OnInit {
 
   }
 
-
-
- 
-
-
-
-
-
-
-
- 
-
 }

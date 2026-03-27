@@ -55,6 +55,13 @@ private autoLoadUser() {
     
     return this.http.get<Client[]>(`${apiUrl}/secretaire/all`, { params });
   }
+   getNonVerifiedClients(page: number = 0, size: number = 10): Observable<Client[]> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    
+    return this.http.get<Client[]>(`${apiUrl}/secretaire/verif`, { params });
+  }
   modifierClient(id: number, clientRequest: ClientReq): Observable<Client> {
     return this.http.put<Client>(
       `${apiUrl}/secretaire/edit/${id}`,
