@@ -1,1 +1,146 @@
-<p>dash-client works!</p>
+<div class="reveal min-h-screen bg-slate-50">
+
+  <!-- Top header bar -->
+  <header class="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Espace Client</h1>
+     
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-8 py-10 space-y-8">
+
+    <!-- Stat cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Total dossiers</p>
+        <p class="text-3xl font-bold text-slate-900">{{ Affaire.length }}</p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">En cours</p>
+        <p class="text-3xl font-bold text-blue-600">
+          {{ dossierEnCours }}
+        </p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Audiences</p>
+        <p class="text-3xl font-bold text-amber-500">{{ Audience.length }}</p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Gagnées</p>
+        <p class="text-3xl font-bold text-emerald-600">
+          {{ dossierGagnee }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Dossiers table -->
+    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Mes Dossiers</h2>
+        <span class="text-xs text-slate-400">{{ Affaire.length }} dossier(s)</span>
+      </div>
+
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-slate-50 text-left">
+            <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">N° Dossier</th>
+            <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Titre</th>
+            <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Ouverture</th>
+            <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Statut</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (item of Affaire; track item.id) {
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="px-6 py-4">
+                <span class="font-mono text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded">
+                  {{ item.numeroDossier }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <p class="font-semibold text-slate-800">{{ item.titre }}</p>
+                <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">
+                  {{ item.description || 'Détails en cours de saisie…' }}
+                </p>
+              </td>
+              <td class="px-6 py-4 text-slate-500 hidden md:table-cell">
+                {{ item.dateOuverture | date:'dd/MM/yyyy' }}
+              </td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full"
+                  [ngClass]="{
+                    'bg-blue-50 text-blue-700': item.statut === 'EN_COURS',
+                    'bg-red-50 text-red-700': item.statut === 'PERDUE',
+                    'bg-emerald-50 text-emerald-700': item.statut === 'GAGNEE'
+                  }">
+                  <span class="w-1.5 h-1.5 rounded-full"
+                    [ngClass]="{
+                      'bg-blue-500 animate-pulse': item.statut === 'EN_COURS',
+                      'bg-red-500': item.statut === 'PERDUE',
+                      'bg-emerald-500': item.statut === 'GAGNEE'
+                    }"></span>
+                  {{ item.statut | titlecase }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button class="text-slate-400 hover:text-slate-900 hover:bg-slate-100 p-2 rounded-lg transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          } 
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Audience agenda -->
+    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Prochaines Audiences</h2>
+        <button routerLink="/client/rdv" class="text-xs font-semibold text-white bg-slate-900 hover:bg-slate-700 px-4 py-2 rounded-lg transition-colors">
+          + Nouveau RDV
+        </button>
+      </div>
+
+      <div class="divide-y divide-slate-100">
+        @for (aud of Audience; track aud.id) {
+          <div class="px-6 py-4 flex items-center gap-6 hover:bg-slate-50 transition-colors">
+            <!-- Date block -->
+            <div class="shrink-0 w-14 text-center bg-amber-50 border border-amber-100 rounded-xl py-2">
+              <p class="text-xs font-bold text-amber-600 uppercase">
+                {{ aud.dateAudience | date:'MMM' }}
+              </p>
+              <p class="text-2xl font-bold text-amber-800 leading-none">
+                {{ aud.dateAudience | date:'dd' }}
+              </p>
+            </div>
+
+            <!-- Details -->
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-slate-800 truncate">{{ aud.affaireTitre }}</p>
+              <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-width="2"/>
+                </svg>
+                {{ aud.tribunal }}
+              </p>
+            </div>
+
+            <!-- Meta -->
+            <div class="shrink-0 text-right">
+              <p class="text-sm font-mono font-semibold text-slate-700">
+                {{ aud.dateAudience | date:'HH:mm' }}
+              </p>
+              <p class="text-xs text-slate-400 mt-0.5">Salle {{ aud.salle }}</p>
+            </div>
+          </div>
+        } 
+      </div>
+    </div>
+
+  </main>
+</div>

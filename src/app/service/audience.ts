@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Audiencereq } from '../interfaces/audiencereq';
 import { Audienceres } from '../interfaces/audienceres';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AudienceService {
-  private apiUrl = 'http://localhost:8080/api/audiences';
+  private apiUrl = environment.apiUrl+ '/audiences';
 
   constructor(private http: HttpClient) {}
   createAudience(request: Audiencereq): Observable<Audienceres> {

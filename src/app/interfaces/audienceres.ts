@@ -5,4 +5,8 @@ export interface Audienceres {
     remarques: string;
     affaireId: number;
     affaireTitre: string
+     tribunal: string;
+    clientNom: string;
+    clientPrenom: string;
+    clientId: number;
 }

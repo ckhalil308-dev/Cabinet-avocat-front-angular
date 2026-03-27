@@ -1,0 +1,59 @@
+<div class="max-w-5xl mx-auto py-12 px-6">
+  <div class="flex justify-between items-center mb-10">
+    <h1 class="text-3xl font-serif italic text-slate-900">Mes Rendez-vous</h1>
+    
+    <div class="flex bg-slate-100 p-1 rounded-2xl border border-slate-200">
+      <button (click)="filterByStatus(StatusRdv.PENDING)" 
+        [class.bg-white]="currentStatus === StatusRdv.PENDING"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm">
+        En attente
+      </button>
+      
+      <button (click)="filterByStatus(StatusRdv.CONFIRMED)" 
+        [class.bg-white]="currentStatus === StatusRdv.CONFIRMED"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm">
+        Confirmés
+      </button>
+
+      <button (click)="filterByStatus(StatusRdv.CANCELLED)" 
+        [class.bg-white]="currentStatus === StatusRdv.CANCELLED"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm">
+        Annulés
+      </button>
+    </div>
+  </div>
+
+  <div class="grid gap-4">
+    @for (rdv of rdvs; track rdv.id) {
+      <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40 flex justify-between items-center">
+        <div class="flex-1">
+          <span class="text-[9px] font-black uppercase tracking-tighter text-slate-400">Date du rendez-vous</span>
+          <h3 class="text-lg font-bold text-slate-900">{{ rdv.creneauDateJour | date:'fullDate' }}</h3>
+          <p class="text-sm text-slate-500 italic mt-1">{{ rdv.creneauHeureDebut }} - {{ rdv.creneauHeureFin }}</p>
+
+          @if (rdv.status === StatusRdv.CANCELLED && rdv.message) {
+            <div class="mt-3 p-3 bg-red-50/50 rounded-xl border border-red-100/50 inline-block">
+              <p class="text-[10px] text-red-400 uppercase font-black mb-1">Motif du refus</p>
+              <p class="text-s text-red-600 font-medium italic"> {{ rdv.message }} </p>
+            </div>
+          }
+        </div>
+        
+        <div class="text-right">
+          <span [ngClass]="{
+              'text-emerald-600 bg-emerald-50': rdv.status === StatusRdv.CONFIRMED,
+              'text-amber-600 bg-amber-50': rdv.status === StatusRdv.PENDING,
+              'text-red-600 bg-red-50': rdv.status === StatusRdv.CANCELLED
+            }" 
+            class="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+            {{ rdv.status === StatusRdv.CANCELLED ? 'Annulé' : (rdv.status === StatusRdv.CONFIRMED ? 'Confirmé' : 'En attente') }}
+          </span>
+        </div>
+      </div>
+    } @empty {
+      <div class="py-20 text-center bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
+        <p class="text-slate-400 font-serif italic">Aucun rendez-vous trouvé dans cette catégorie.</p>
+      </div>
+    }
+  </div>
+</div>

@@ -1,121 +1,300 @@
-<div class="max-w-6xl mx-auto py-10 px-8 space-y-12">
-  
-  <div class="flex items-center justify-between reveal">
-    <a  [routerLink]="['/secretaire/clientDetails', clientId]"  class="group flex items-center space-x-3 text-slate-400 hover:text-slate-900 transition-all">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 group-hover:-translate-x-1 transition-transform">
+<div class="max-w-7xl mx-auto py-10 px-8 space-y-16">
+
+  <div class="flex items-center justify-between">
+    <a [routerLink]="['/secretaire/clientDetails', clientId]"
+       class="group flex items-center space-x-3 text-slate-400 hover:text-slate-900 transition-all">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+           stroke="currentColor" class="w-4 h-4 group-hover:-translate-x-1 transition-transform">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
       </svg>
-      <span class="text-[9px] uppercase tracking-[0.3em] font-bold">Retour</span>
+      <span class="text-[9px] uppercase tracking-[0.3em] font-bold">Retour au dossier client</span>
     </a>
-    
     <div class="flex items-center space-x-4">
-        <div class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></div>
-        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 italic">Dossier Actif</span>
+      <div class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></div>
+      <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 italic">Dossier de Procédure Actif</span>
     </div>
   </div>
 
-  @if (selectedAffaire) {
+@if (selectedAffaire) {
+  <app-case-header [affaire]="selectedAffaire"></app-case-header>
+
+  <div class="mt-8 border-t-8 border-slate-900 pt-8">
     
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 reveal">
-      
-      <div class="lg:col-span-8 space-y-8">
-        <div class="space-y-3">
-            <p class="text-[9px] font-bold uppercase tracking-[0.4em] text-amber-600">Référence {{ selectedAffaire.numeroDossier }}</p>
-            <h1 class="text-4xl font-serif italic text-slate-900 leading-tight tracking-tight">
-                {{ selectedAffaire.titre }}
-            </h1>
-        </div>
-
-        <div class="grid grid-cols-3 gap-6 py-6 border-y border-slate-100">
-            <div class="space-y-1">
-                <span class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Ouverture</span>
-                <p class="text-xs font-semibold text-slate-800">{{ selectedAffaire.dateOuverture | date:'dd.MM.yyyy' }}</p>
-            </div>
-            <div class="space-y-1 border-x border-slate-100 px-6">
-                <span class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Statut</span>
-                <p class="text-[10px] font-bold text-slate-900 uppercase italic border-b border-amber-500 w-fit leading-none pb-1">
-                  {{ selectedAffaire.statut }}
-                </p>
-            </div>
-            <div class="space-y-1 text-right">
-                <span class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Responsable</span>
-                <p class="text-xs font-semibold text-slate-800 italic">Me. Saïdane</p>
-            </div>
-        </div>
-
-        <div class="relative group">
-            <div class="absolute -left-4 top-0 h-full w-[1px] bg-slate-200"></div>
-            <p class="text-base font-serif text-slate-600 leading-relaxed italic">
-               "{{ selectedAffaire.description }}"
-            </p>
-        </div>
+    <div class="flex items-baseline justify-between mb-8 border-b border-slate-200 pb-4">
+      <div class="flex items-baseline space-x-6">
+        <h2 class="text-3xl font-serif text-slate-900 uppercase tracking-tighter">Registre des Audiences</h2>
+        <span class="h-4 w-[1px] bg-slate-300"></span>
+        <p class="text-[10px] font-bold text-amber-700 tracking-[0.3em] uppercase">Chronologie Judiciaire</p>
       </div>
-
-      <div class="lg:col-span-4">
-        <div class="bg-[#1a1c1e] text-white p-7 rounded-sm shadow-xl relative overflow-hidden">
-            <h3 class="text-[8px] font-bold uppercase tracking-[0.4em] text-amber-500/80 mb-6 italic">Partie Requérante</h3>
-            
-            <div class="space-y-5 relative z-10">
-                <div class="flex items-baseline justify-between">
-                    <p class="text-[15px] font-serif  tracking-wide">{{ selectedAffaire.clientPrenom }} {{ selectedAffaire.clientNom }}</p>
-                    <p class="text-[12px] text-slate-500">ID-{{ selectedAffaire.clientId }}</p>
-                </div>
-            </div>
+      
+      <div class="text-right flex items-center space-x-4">
+        <div class="leading-none">
+          <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume du dossier</p>
+          <p class="text-lg font-serif italic text-slate-900">{{ audiences.length }} Actes Consignés</p>
         </div>
       </div>
     </div>
 
-    <div class="pt-10 reveal" style="transition-delay: 200ms;">
-      
-      <div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-4">
-        <h2 class="text-2xl font-serif italic text-slate-900 tracking-tight">Registre des Audiences</h2>
-        <span class="text-[9px] font-bold text-slate-400 tracking-[0.3em] uppercase">Session Judiciaire</span>
-      </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      @for (audience of audiences; track audience.id; let i = $index) {
+        <app-audience-card 
+          [audience]="audience" 
+          [i]="i"
+          (edit)="openEditPopup($event)"
+          (postpone)="openPostponePopup($event)"
+          (delete)="deleteAudience($event)">
+        </app-audience-card>
+      }
+
+      <div (click)="openCreateForm()"
+           class="border border-dashed border-slate-300 p-8 flex flex-col items-center justify-center text-center group
+                  hover:bg-slate-50 hover:border-slate-900 transition-all duration-300 cursor-pointer min-h-[360px] bg-slate-50/20">
         
-        <div class="bg-white border border-slate-200 p-6 flex flex-col justify-between min-h-[220px] hover:border-slate-900 transition-all duration-500 group">
-          <div class="space-y-4">
-            <div class="flex justify-between items-center">
-              <span class="text-[9px] font-mono text-slate-300 group-hover:text-amber-600 transition-colors uppercase">Ordre_01</span>
-              <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-500 transition-colors"></div>
-            </div>
-            <p class="text-lg font-serif italic text-slate-300 group-hover:text-slate-900 transition-colors">Plaidoirie Principale</p>
-          </div>
-          <div class="pt-4 border-t border-slate-50 flex justify-between items-center">
-            <span class="text-[8px] font-bold text-slate-300 uppercase tracking-widest italic">Date à définir</span>
-            <svg class="w-3 h-3 text-slate-200 group-hover:text-slate-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2"/></svg>
-          </div>
-        </div>
-
-        <div class="bg-white border border-slate-200 p-6 flex flex-col justify-between min-h-[220px] hover:border-slate-900 transition-all duration-500 group">
-          <div class="space-y-4">
-            <div class="flex justify-between items-center">
-              <span class="text-[9px] font-mono text-slate-300 group-hover:text-amber-600 transition-colors uppercase">Ordre_02</span>
-              <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-500 transition-colors"></div>
-            </div>
-            <p class="text-lg font-serif italic text-slate-300 group-hover:text-slate-900 transition-colors">Délibéré Final</p>
-          </div>
-          <div class="pt-4 border-t border-slate-50 flex justify-between items-center">
-            <span class="text-[8px] font-bold text-slate-300 uppercase tracking-widest italic">Phase d'instruction</span>
-            <svg class="w-3 h-3 text-slate-200 group-hover:text-slate-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2"/></svg>
-          </div>
+        <div class="mb-4 opacity-40 group-hover:opacity-100 transition-opacity">
+          <svg class="w-10 h-10 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="1"/>
+          </svg>
         </div>
         
-        <div class="bg-slate-50/50 p-6 flex flex-col items-center justify-center text-center group hover:bg-slate-900 transition-all duration-500 cursor-pointer border border-dashed border-slate-300">
-            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-all border border-slate-100">
-                <svg class="w-4 h-4 text-slate-400 group-hover:text-amber-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2"/></svg>
-            </div>
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 group-hover:text-white transition-colors">Nouvelle Séance</p>
+        <div class="space-y-1">
+          <p class="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-900">Nouvelle Inscription</p>
+          <p class="text-[10px] text-slate-400 font-serif italic">Planifier une audience supplémentaire au greffe</p>
+        </div>
+
+        <div class="mt-6 w-32 space-y-2 opacity-20">
+          <div class="h-[1px] bg-slate-900 w-full"></div>
+          <div class="h-[1px] bg-slate-900 w-2/3 mx-auto"></div>
         </div>
       </div>
+
     </div>
-
-  } @else {
+  </div>
+} @else {
     <div class="py-20 flex flex-col items-center justify-center space-y-4 opacity-30">
-        <div class="w-px h-12 bg-slate-400"></div>
-        <p class="text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 animate-pulse">Consultation Archives</p>
+      <div class="w-px h-16 bg-slate-400"></div>
+      <p class="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-400 animate-pulse">Accès aux archives en cours...</p>
     </div>
   }
-
 </div>
+
+<!-- ════════════════════════════════════════════════════════
+     CREATE POPUP
+════════════════════════════════════════════════════════ -->
+@if (showCreateForm) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg mx-4 shadow-2xl rounded-sm overflow-hidden">
+
+      <div class="bg-[#1a1c1e] px-8 py-5 flex items-center justify-between">
+        <div>
+          <p class="text-[8px] font-bold uppercase tracking-[0.4em] text-amber-500/80 mb-1">Nouvelle Séance</p>
+          <h3 class="text-base font-serif italic text-white">Créer une Audience</h3>
+        </div>
+        <button (click)="closeCreateForm()" class="text-slate-500 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+    <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="p-6 space-y-6 bg-white rounded-xl">
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    
+    <div class="flex flex-col space-y-1.5">
+      <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Date Audience</label>
+      <input type="datetime-local" formControlName="dateAudience"
+             class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 
+                    outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all"/>
+      @if (createForm.get('dateAudience')?.invalid && createForm.get('dateAudience')?.touched) {
+        <span class="text-xs text-red-500 font-medium">Champ requis</span>
+      }
+    </div>
+
+    <div class="flex flex-col space-y-1.5">
+      <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Tribunal</label>
+      <input type="text" formControlName="tribunal" placeholder="ex: Tribunal de Tunis"
+             class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 
+                    outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all 
+                    placeholder:text-slate-400"/>
+      @if (createForm.get('tribunal')?.invalid && createForm.get('tribunal')?.touched) {
+        <span class="text-xs text-red-500 font-medium">Champ requis</span>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-col space-y-1.5">
+    <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Salle</label>
+    <input type="text" formControlName="salle" placeholder="ex: Salle 4B"
+           class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 
+                  outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all 
+                  placeholder:text-slate-400"/>
+    @if (createForm.get('salle')?.invalid && createForm.get('salle')?.touched) {
+      <span class="text-xs text-red-500 font-medium">Champ requis</span>
+    }
+  </div>
+
+  <div class="flex flex-col space-y-1.5">
+    <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Remarques</label>
+    <textarea formControlName="remarques" rows="3" placeholder="Notes complémentaires..."
+              class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 
+                     outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all 
+                     placeholder:text-slate-400 resize-none"></textarea>
+  </div>
+
+  <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+    <button type="button" (click)="closeCreateForm()"
+            class="px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-500 
+                   hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors">
+      Annuler
+    </button>
+    <button type="submit" [disabled]="createForm.invalid"
+            class="px-8 py-2.5 text-xs font-bold uppercase tracking-widest bg-slate-900 text-white 
+                   rounded-lg shadow-sm hover:bg-indigo-600 active:transform active:scale-95 
+                   transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+      Créer l'audience
+    </button>
+  </div>
+
+</form>
+    </div>
+  </div>
+}
+
+<!-- ════════════════════════════════════════════════════════
+     EDIT POPUP
+════════════════════════════════════════════════════════ -->
+@if (showEditPopup) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg mx-4 shadow-2xl rounded-sm overflow-hidden">
+
+      <div class="bg-[#1a1c1e] px-8 py-5 flex items-center justify-between">
+        <div>
+          <p class="text-[8px] font-bold uppercase tracking-[0.4em] text-amber-500/80 mb-1">Modification</p>
+          <h3 class="text-base font-serif italic text-white">Modifier l'Audience</h3>
+        </div>
+        <button (click)="closeEditPopup()" class="text-slate-500 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="editForm" (ngSubmit)="submitEdit()" class="px-8 py-6 space-y-5">
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Date Audience</label>
+            <input type="datetime-local" formControlName="dateAudience"
+                   class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                          text-xs text-slate-800 py-2 bg-transparent transition-colors"/>
+            @if (editForm.get('dateAudience')?.invalid && editForm.get('dateAudience')?.touched) {
+              <span class="text-[9px] text-red-400">Champ requis</span>
+            }
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Tribunal</label>
+            <input type="text" formControlName="tribunal" placeholder="ex: Tribunal de Tunis"
+                   class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                          text-xs text-slate-800 py-2 bg-transparent transition-colors placeholder:text-slate-300"/>
+            @if (editForm.get('tribunal')?.invalid && editForm.get('tribunal')?.touched) {
+              <span class="text-[9px] text-red-400">Champ requis</span>
+            }
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Salle</label>
+          <input type="text" formControlName="salle" placeholder="ex: Salle 4B"
+                 class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                        text-xs text-slate-800 py-2 bg-transparent transition-colors placeholder:text-slate-300"/>
+          @if (editForm.get('salle')?.invalid && editForm.get('salle')?.touched) {
+            <span class="text-[9px] text-red-400">Champ requis</span>
+          }
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Remarques</label>
+          <textarea formControlName="remarques" rows="3" placeholder="Notes complémentaires..."
+                    class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                           text-xs text-slate-800 py-2 bg-transparent transition-colors
+                           placeholder:text-slate-300 resize-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-2 border-t border-slate-100">
+          <button type="button" (click)="closeEditPopup()"
+                  class="text-[9px] font-bold uppercase tracking-widest text-slate-400
+                         hover:text-slate-900 transition-colors px-4 py-2">
+            Annuler
+          </button>
+          <button type="submit" [disabled]="editForm.invalid"
+                  class="text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white
+                         px-6 py-2.5 hover:bg-amber-600 transition-colors disabled:opacity-40
+                         disabled:cursor-not-allowed">
+            Enregistrer
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
+
+@if (showPostponePopup) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md mx-4 shadow-2xl rounded-sm overflow-hidden">
+
+      <div class="bg-[#1a1c1e] px-8 py-5 flex items-center justify-between">
+        <div>
+          <p class="text-[8px] font-bold uppercase tracking-[0.4em] text-amber-500/80 mb-1">Report</p>
+          <h3 class="text-base font-serif italic text-white">Reporter l'Audience</h3>
+        </div>
+        <button (click)="closePostponePopup()" class="text-slate-500 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="postponeForm" (ngSubmit)="submitPostpone()" class="px-8 py-6 space-y-5">
+
+        <div class="space-y-1.5">
+          <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Nouvelle Date</label>
+          <input type="datetime-local" formControlName="nouvelleDate"
+                 class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                        text-xs text-slate-800 py-2 bg-transparent transition-colors"/>
+          @if (postponeForm.get('nouvelleDate')?.invalid && postponeForm.get('nouvelleDate')?.touched) {
+            <span class="text-[9px] text-red-400">Champ requis</span>
+          }
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[8px] font-bold uppercase tracking-widest text-slate-400">Motif du Report</label>
+          <textarea formControlName="motif" rows="3" placeholder="Raison du report..."
+                    class="w-full border-b border-slate-200 focus:border-slate-900 outline-none
+                           text-xs text-slate-800 py-2 bg-transparent transition-colors
+                           placeholder:text-slate-300 resize-none"></textarea>
+          @if (postponeForm.get('motif')?.invalid && postponeForm.get('motif')?.touched) {
+            <span class="text-[9px] text-red-400">Champ requis</span>
+          }
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-2 border-t border-slate-100">
+          <button type="button" (click)="closePostponePopup()"
+                  class="text-[9px] font-bold uppercase tracking-widest text-slate-400
+                         hover:text-slate-900 transition-colors px-4 py-2">
+            Annuler
+          </button>
+          <button type="submit" [disabled]="postponeForm.invalid"
+                  class="text-[9px] font-bold uppercase tracking-widest bg-amber-600 text-white
+                         px-6 py-2.5 hover:bg-amber-700 transition-colors disabled:opacity-40
+                         disabled:cursor-not-allowed">
+            Reporter
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}

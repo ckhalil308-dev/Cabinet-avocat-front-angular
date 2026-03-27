@@ -10,6 +10,8 @@ import { AffaireReq } from '../../interfaces/affaire-req';
 import { forkJoin } from 'rxjs';
 import { StatusAffaire } from '../../enums/status-affaire';
 import { Uneaffaire } from "../Uneaffaire/Uneaffaire";
+import { AudienceService } from '../../service/audience';
+import { Audienceres } from '../../interfaces/audienceres';
 
 @Component({
   selector: 'app-client-detail',
@@ -19,9 +21,11 @@ import { Uneaffaire } from "../Uneaffaire/Uneaffaire";
   styleUrl: './client-detail.css',
 })
 export class CLientDetail implements OnInit {
+
   router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private userService = inject(ServiceUser);
+  private audienceService=inject(AudienceService);
   private cdr = inject(ChangeDetectorRef);
   private affaireService = inject(AffaireService);
   private fb = inject(FormBuilder);
@@ -43,13 +47,17 @@ export class CLientDetail implements OnInit {
   ngOnInit(): void {
     this.clientId = Number(this.activatedRoute.snapshot.params['id']);
     this.initForm();
-
+     
     forkJoin({
       client:   this.userService.getClientById(this.clientId),
       affaires: this.affaireService.getAffairesByClientId(this.clientId),
     }).subscribe({
       next: ({ client, affaires }) => {
+        this.audience = [];
         this.clientDetails = client;
+        affaires.forEach(affaire => {
+          this.getAudiencesperAffaire(affaire.id);
+        });
         this.affaireClient = affaires;
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -136,6 +144,21 @@ export class CLientDetail implements OnInit {
       });
     }
   }
+  audience:Audienceres[]=[]; 
+ getAudiencesperAffaire(affaireId: number) {
+  this.audienceService.getAudiencesByAffaire(affaireId).subscribe({
+    next: (audiences) => {
+      // On ajoute les nouvelles audiences à la liste existante au lieu de remplacer
+      this.audience = [...this.audience, ...audiences];
+      this.cdr.detectChanges(); // Important pour mettre à jour la vue
+    },
+    error: (err) => console.error('Error fetching audiences', err)
+  });
+}
+ getAudiencesForAffaire(affaireId: number): Audienceres[] {
+  return this.audience.filter(audience => audience.affaireId === affaireId);
+ }
+ 
 
   deleteAffaire(id: number): void {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette affaire ?')) return;

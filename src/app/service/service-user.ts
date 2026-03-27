@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ApiResponse } from '../interfaces/api-response';
 import { ClientRegister } from '../interfaces/client-register';
 import { ClientReq } from '../interfaces/client-req';
+import { DashboardRes } from '../interfaces/dashboaedres';
 const apiUrl=environment.apiUrl+"/users";
 @Injectable({
   providedIn: 'root',
@@ -77,11 +78,13 @@ private autoLoadUser() {
       {}
     );
   }
+   getDashboard():Observable<DashboardRes> {
+       return this.http.get<DashboardRes>(`${apiUrl}/secretaire/dashboard`);
 
   }
   
 
-
+}
 
 
 

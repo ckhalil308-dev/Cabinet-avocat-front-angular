@@ -14,6 +14,9 @@ import { ListeClient } from './secretaire/liste-client/liste-client';
 import { Affaire } from './secretaire/affaire/affaire';
 import { CLientDetail } from './secretaire/client-detail/client-detail';
 import { VeriferClient } from './secretaire/verifer-client/verifer-client';
+import { Rdv } from './client/rdv/rdv';
+import { MesRdv } from './secretaire/mes-rdv/mes-rdv';
+import { MesRdvClient } from './client/mes-rdvs/mes-rdvs';
 
     export const routes: Routes = [
         { path:"home", title:"Home" , component:Accueil ,}
@@ -28,8 +31,10 @@ import { VeriferClient } from './secretaire/verifer-client/verifer-client';
        children: [
       { path: "", redirectTo: "dashboard", pathMatch: "full" }, 
       { path: "dashboard", title: "Mon Dashboard", component:DashClient  },
-    //   { path: "audiences", title: "Mes Audiences", component: MesAudiencesComponent },
-    //   { path: "rdv", title: "Mes Rendez-vous", component: MesRdvComponent },
+      { path:"rdv" , title:"passz un rdv" , component:Rdv},
+      { path:"MesRdv",title:"Mes Rendez-vous", component:MesRdvClient},                                                 
+   
+
     ]
   },
   {
@@ -45,10 +50,12 @@ import { VeriferClient } from './secretaire/verifer-client/verifer-client';
       { path:"affaires/:clientId/:id", title:"Gérer les Affaires", component:Affaire},
       {path:"clientDetails/:id", title:"Détails du Client", component:CLientDetail},
         {path:"VerifierClient", title:"Détails du Client", component:VeriferClient},
+         {path:"rdv", title:"Détails du Client", component:MesRdv},
       { path: "", redirectTo: "dashboard", pathMatch: "full" }
        ]
     
     },
+    
         { path:"", redirectTo:"home", pathMatch:"full" }
 
     ];
