@@ -1,0 +1,92 @@
+<div class= " reveal  mt-4   min-h-screen flex items-center justify-center bg-[#f8fafc] font-sans px-6">
+  <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute -left-20 bottom-0 h-full w-1/4 bg-slate-200/30 skew-x-[12deg] transform"></div>
+  </div>
+  
+  <div class="relative z-10 w-full max-w-md bg-white p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100">
+    
+    <!-- Header -->
+    <div class="text-center  mb-12">
+      <h2 class="text-xs tracking-[0.4em] uppercase text-slate-400 mb-4">Espace Client</h2>
+      <h1 class="text-3xl font-light text-slate-900 leading-tight">
+        Mahassen <span class="font-semibold italic text-[#1e293b]">Saïdane</span>
+      </h1>
+      <div class="h-[1px] w-12 bg-slate-200 mx-auto mt-6"></div>
+    </div>
+
+    @if (error.length > 0) {
+      <div class="animate-pulse text-center text-red-500 text-xs mb-8 uppercase tracking-widest">
+         {{ error }}
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-8">
+      
+      <div class="group relative">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 transition-colors group-focus-within:text-slate-900">
+          Adresse Email
+        </label>
+        <input 
+          type="email" 
+          formControlName="email"
+          class="w-full bg-transparent border-b border-slate-200 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all placeholder:text-slate-300 font-light"
+          placeholder="nom@exemple.com"
+        >
+      </div>
+
+      <!-- Password Input -->
+      <div class="group relative">
+        <div class="flex justify-between items-center mb-2">
+          <label class="block text-[10px] uppercase tracking-widest text-slate-500 transition-colors group-focus-within:text-slate-900">
+            Mot de passe
+          </label>
+          <a href="#" class="text-[10px] uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">
+            Oublié ?
+          </a>
+        </div>
+        <input 
+          type="password" 
+          formControlName="password"
+          class="w-full bg-transparent border-b border-slate-200 py-3 text-slate-900 focus:outline-none focus:border-slate-900 transition-all placeholder:text-slate-300 font-light"
+          placeholder="••••••••"
+        >
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-6">
+        <button 
+          type="submit"
+          [disabled]="isLoading"
+          class="w-full py-5 bg-[#0f172a] text-white text-[11px] uppercase tracking-[0.3em] font-bold hover:bg-slate-800 transition-all duration-300 shadow-xl shadow-slate-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
+        >
+          @if (isLoading) {
+            Connexion en cours...
+          } @else {
+            Se Connecter
+          }
+        </button>
+      </div>
+    
+    </form>
+
+    <div class="mt-12 text-center">
+      <p class="text-[11px] text-slate-400 uppercase tracking-widest">
+        Accès restreint aux clients du cabinet
+      </p>
+      <div class="mt-8 flex flex-col gap-4">
+        <p class="text-[14px] text-slate-500">
+          Pas de compte ?
+          <a 
+             routerLink="/register"
+            class="font-semibold text-slate-900 hover:text-slate-700 transition-colors border-b border-transparent hover:border-slate-900"
+          >
+            S'inscrire
+          </a>
+        </p>
+      </div>
+      <a href="/" class="inline-block mt-6 text-[14px] text-slate-500 hover:text-slate-900 transition-colors border-b border-transparent hover:border-slate-900 pb-1">
+        ← Retour au site principal
+      </a>
+    </div>
+  </div>
+</div>

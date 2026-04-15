@@ -1,0 +1,129 @@
+@if(loading){
+    <div class="flex items-center justify-center h-64">
+        <svg class="animate-spin h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="ml-2 text-gray-500">Chargement...</span>
+    </div>
+
+}@else{
+   @if (clients.length==0) {
+        <p
+        >Aucun client trouvé.</p>
+   } 
+
+<div class="w-full bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden reveal">
+  <table class="w-full text-left border-collapse">
+    <thead class="bg-slate-50 border-b border-slate-200">
+      <tr>
+        <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500">Nom</th>
+        <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500">Prénom</th>
+        <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500">Email</th>
+        <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500">Téléphone</th>
+        <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
+      </tr>
+    </thead>
+    
+    <tbody class="divide-y divide-slate-100">
+      @for (item of clients; track item.id) {
+          <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="px-4 py-4 text-sm font-semibold text-slate-900">{{ item.nom }}</td>
+          <td class="px-4 py-4 text-sm text-slate-700">{{ item.prenom }}</td>
+          <td class="px-4 py-4 text-sm text-slate-600 font-mono">{{ item.email }}</td>
+          <td class="px-4 py-4 text-sm text-slate-700">
+            <span class="bg-slate-100 px-2 py-1 rounded text-xs border border-slate-200">
+              {{ item.numTelephone }}
+            </span>
+          </td>
+          <td class="px-4 py-4 text-right">
+            <div class="flex justify-end space-x-2">
+               <a [routerLink]="['/secretaire/clientDetails', item.id]" class=" flex  align-items justify-center p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-all">
+          
+                 détails
+
+                 
+              </a>
+              <button  (click)="getClient(item.id)" class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </button>
+              <button (click)="DeleteClient(item.id)" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+             
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+@if(isEditMode) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4">
+  
+  <div class="w-full max-w-2xl bg-white rounded-sm shadow-2xl reveal overflow-hidden border border-slate-200">
+    
+    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+      <h2 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900">
+        Modification de la fiche client
+      </h2>
+      <button (click)="isEditMode = false" class="text-slate-400 hover:text-slate-900 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="EditClientForm" (ngSubmit)="modifierClient()" class="p-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Nom de famille</label>
+          <input type="text" formControlName="nom" 
+            class="w-full px-4 py-2 text-sm bg-white border border-slate-200 rounded-sm focus:border-slate-900 outline-none transition-all">
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Prénom</label>
+          <input type="text" formControlName="prenom" 
+            class="w-full px-4 py-2 text-sm bg-white border border-slate-200 rounded-sm focus:border-slate-900 outline-none transition-all">
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Adresse Email</label>
+          <input type="email" formControlName="email" 
+            class="w-full px-4 py-2 text-sm font-mono bg-white border border-slate-200 rounded-sm focus:border-slate-900 outline-none transition-all">
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Téléphone</label>
+          <input type="text" formControlName="numTelephone" 
+            class="w-full px-4 py-2 text-sm bg-white border border-slate-200 rounded-sm focus:border-slate-900 outline-none transition-all">
+        </div>
+
+      </div>
+
+      <div class="mt-10 pt-6 border-t border-slate-100 flex justify-end space-x-4">
+        <button type="button" (click)="isEditMode = false"
+          class="px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-all border border-transparent hover:border-slate-200">
+          Annuler
+        </button>
+        
+        <button type="submit" [disabled]="EditClientForm.invalid"
+          class="px-8 py-2.5 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-sm hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 transition-all shadow-lg">
+          Sauvegarder les changements
+        </button>
+      
+      </div>
+
+    </form>
+  </div>
+</div>
+}
+<app-pagination [currentPage]="page" [totalPages]="totalPages" (pageChange)="setPage($event)" ></app-pagination>
+}

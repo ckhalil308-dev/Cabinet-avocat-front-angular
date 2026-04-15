@@ -1,0 +1,44 @@
+<div class="flex h-screen w-full bg-slate-50 overflow-hidden font-sans">
+  
+  <aside class="w-64 min-w-[256px] bg-slate-900 text-white flex flex-col border-r border-slate-800 shrink-0">
+    <div class="p-8 border-b border-slate-800">
+      <h1 class="text-lg font-bold tracking-tighter uppercase italic">
+        Espace <span class="font-light text-slate-400">Client</span>
+      </h1>
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2 mt-4 overflow-y-auto">
+      <a routerLink="/client/dashboard" routerLinkActive="bg-slate-800 text-white" 
+         class="flex items-center space-x-3 p-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all text-xs uppercase tracking-widest">
+        <span>Tableau de bord</span>
+      </a>
+      <a routerLink="/client/rdv" routerLinkActive="bg-slate-800 text-white"
+         class="flex items-center space-x-3 p-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all text-xs uppercase tracking-widest">
+        <span>Prendre un RDV</span>
+      </a>
+            <a routerLink="/client/MesRdv" routerLinkActive="bg-slate-800 text-white"
+         class="flex items-center space-x-3 p-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all text-xs uppercase tracking-widest">
+        <span>Mes RDVs</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800">
+      @if (user$ | async; as client) {
+        <div class="flex items-center space-x-3 mb-4 px-2">
+          <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">
+            {{ client.prenom.charAt(0) }}
+          </div>
+          <span class="text-s font-medium text-slate-300">{{ client.prenom }} {{ client.nom }}</span>
+        </div>
+      }
+      <button (click)="logout()" class="w-full text-left p-3 text-[10px] uppercase tracking-widest text-red-400 hover:bg-red-900/20 rounded-lg transition-colors">
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 h-full overflow-y-auto p-10">
+    <router-outlet></router-outlet>
+   </main>
+
+</div>

@@ -1,0 +1,92 @@
+<div class="max-w-6xl mx-auto py-12 px-6">
+  <div class="mb-10 flex justify-between items-end">
+    <div>
+      <h1 class="text-3xl font-serif italic text-slate-900">Demandes de RDV</h1>
+      <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2 font-mono">Administration du cabinet</p>
+    </div>
+
+    <div class="flex bg-slate-100 p-1 rounded-2xl border border-slate-200">
+      <button (click)="filterByStatus(StatusRdv.PENDING)" 
+        [class.bg-white]="currentStatus === StatusRdv.PENDING"
+        [class.shadow-sm]="currentStatus === StatusRdv.PENDING"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all">En attente</button>
+      
+      <button (click)="filterByStatus(StatusRdv.CONFIRMED)" 
+        [class.bg-white]="currentStatus === StatusRdv.CONFIRMED"
+        [class.shadow-sm]="currentStatus === StatusRdv.CONFIRMED"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all">Confirmés</button>
+      
+      <button (click)="filterByStatus(StatusRdv.CANCELLED)" 
+        [class.bg-white]="currentStatus === StatusRdv.CANCELLED"
+        [class.shadow-sm]="currentStatus === StatusRdv.CANCELLED"
+        class="px-6 py-2 rounded-xl text-[10px] font-black uppercase transition-all">Refusés</button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-50 overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="bg-slate-50/30">
+        <tr>
+          <th class="p-6 text-[10px] uppercase font-bold text-slate-400">Client</th>
+          <th class="p-6 text-[10px] uppercase font-bold text-slate-400">Détails RDV</th>
+          <th class="p-6 text-[10px] uppercase font-bold text-slate-400">Statut</th>
+          <th class="p-6 text-[10px] uppercase font-bold text-slate-400 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        @for (rdv of rdvs; track rdv.id) {
+          <tr class="hover:bg-slate-50/20 transition-all">
+            <td class="p-6">
+              <p class="text-sm font-bold text-slate-900">{{ rdv.clientNom }} {{ rdv.clientPrenom }}</p>
+              <p class="text-[10px] text-slate-400 italic">"{{ rdv.motif }}"</p>
+            </td>
+            <td class="p-6">
+              <span class="text-xs text-slate-600 block">{{ rdv.creneauDateJour | date:'dd MMM yyyy' }}</span>
+              <span class="text-[10px] text-slate-400 uppercase font-black">{{ rdv.creneauHeureDebut }} - {{ rdv.creneauHeureFin }}</span>
+            </td>
+            <td class="p-6">
+              <span [ngClass]="{
+                'bg-amber-50 text-amber-600': rdv.status === StatusRdv.PENDING,
+                'bg-emerald-50 text-emerald-600': rdv.status === StatusRdv.CONFIRMED,
+                'bg-red-50 text-red-600': rdv.status === StatusRdv.CANCELLED
+              }" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter">
+                {{ rdv.status }}
+              </span>
+            </td>
+            <td class="p-6 text-right">
+              @if (rdv.status === StatusRdv.PENDING) {
+                <div class="flex justify-end gap-2 reveal">
+                  <button (click)="openCancelModal(rdv.id)" class="text-red-500 text-[10px] font-bold uppercase px-4 py-2 hover:bg-red-50 rounded-xl transition-all">Refuser</button>
+                  <button (click)="confirmerRdv(rdv.id)" class="bg-slate-900 text-white text-[10px] font-bold uppercase px-6 py-2 rounded-xl hover:bg-emerald-600 shadow-lg shadow-slate-200 transition-all">Confirmer</button>
+                </div>
+              } @else {
+                <span class="text-[10px] text-slate-300 font-bold uppercase italic">Traitée</span>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="p-24 text-center">
+              <p class="text-slate-300 font-serif italic text-xl">Aucun rendez-vous dans cette catégorie.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (showCancelModal) {
+  <div class="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl reveal">
+      <h3 class="text-2xl font-serif italic text-slate-900 mb-6">Motif du refus</h3>
+      <textarea [(ngModel)]="refusalReason" class="w-full bg-slate-50 border-none rounded-2xl p-5 text-sm outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-red-400" rows="4"></textarea>
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <button (click)="closeCancelModal()" class="py-4 text-[10px] font-bold uppercase text-slate-400">Annuler</button>
+        <button (click)="submitCancel()" [disabled]="!refusalReason.trim() || isSubmitting" class="py-4 bg-red-500 text-white rounded-2xl text-[10px] font-bold uppercase shadow-lg shadow-red-100">
+          {{ isSubmitting ? 'Refus...' : 'Confirmer le refus' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

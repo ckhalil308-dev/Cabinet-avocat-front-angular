@@ -1,0 +1,104 @@
+<div class="fixed top-6 right-6 z-[150] space-y-3">
+  @if (feedback) {
+    <div
+      class="flex items-start gap-3 w-80 rounded-2xl p-4 shadow-2xl shadow-slate-200 border"
+      [ngClass]="feedback.type === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'">
+      <div
+        class="h-9 w-9 flex items-center justify-center rounded-xl text-xs font-black tracking-wide"
+        [ngClass]="feedback.type === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'">
+        @if (feedback.type === 'success') { OK } @else { ! }
+      </div>
+      <div class="flex-1 text-sm text-slate-700 leading-relaxed">
+        <p class="font-semibold text-slate-900 mb-1">
+          {{ feedback.type === 'success' ? 'Demande envoyée' : 'Impossible de finaliser' }}
+        </p>
+        <p class="text-xs text-slate-500">{{ feedback.message }}</p>
+      </div>
+      <button
+        type="button"
+        aria-label="Fermer la notification"
+        (click)="dismissFeedback()"
+        class="text-slate-400 hover:text-slate-700 transition-colors text-lg leading-none">
+        x
+      </button>
+    </div>
+  }
+</div>
+
+<div class="max-w-6xl mx-auto py-12 px-6">
+  
+  @if (currentStep === 1) {
+<div class="flex flex-col items-center justify-center py-20 bg-white rounded-[3rem] shadow-xl border border-slate-50 reveal">
+  <div class="text-center mb-10">
+    <h1 class="text-5xl font-serif italic text-slate-900 mb-4">Prendre rendez-vous</h1>
+    <p class="text-slate-400 text-[13px] uppercase tracking-[0.15em] font-medium">
+      Planifiez votre consultation initiale pour une étude approfondie de votre dossier.
+    </p>
+  </div>
+  
+  <button (click)="goToCalendar()" 
+    class="group relative px-12 py-5 bg-slate-900 text-white rounded-full text-[11px] font-black uppercase tracking-[0.25em] hover:bg-slate-800 transition-all shadow-2xl shadow-slate-200">
+    Réserver une consultation
+    <span class="inline-block ml-3 group-hover:translate-x-1 transition-transform">→</span>
+  </button>
+</div>
+  }
+
+  @if (currentStep === 2) {
+    <div class="reveal">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h1 class="text-3xl font-serif italic text-slate-900">Disponibilités</h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-2">Cliquez sur un créneau libre dans la semaine</p>
+        </div>
+        <button (click)="goBack()" class="text-[10px] font-bold uppercase text-slate-400 hover:text-slate-900 transition-colors">
+          ← Retour à l'accueil
+        </button>
+      </div>
+
+      <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-50 relative overflow-hidden">
+        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+
+        @if (showBookingForm) {
+          <div class="absolute inset-0 z-[100]  backdrop-blur-md flex items-center justify-center p-4 reveal">
+            <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl scale-in">
+              <div class="mb-8">
+                <h3 class="text-2xl font-serif italic text-slate-900">Motif du rendez-vous</h3>
+                <p class="text-[10px] text-slate-400 uppercase font-bold mt-2 tracking-widest">
+                  RDV le {{ selectedSlot?.start | date:'dd MMMM yyyy' }} à {{ selectedSlot?.start | date:'HH:mm' }}
+                </p>
+              </div>
+
+              <form [formGroup]="bookingForm" (ngSubmit)="confirmBooking()">
+                <div class="space-y-4">
+                  <label class="text-[9px] uppercase font-black text-slate-400 tracking-tighter">Décrivez brièvement votre demande</label>
+                  <textarea 
+                    formControlName="motif" 
+                    class="w-full bg-slate-50 border-none rounded-2xl p-5 text-sm outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-slate-900 transition-all shadow-inner" 
+                    rows="4"
+                    placeholder="Ex: Consultation pour un contrat commercial...">
+                  </textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-10">
+                  <button type="button" (click)="closeBookingForm()" 
+                    class="py-4 text-[10px] font-bold uppercase text-slate-400 hover:text-slate-600 transition-colors">
+                    Annuler
+                  </button>
+                  <button type="submit" [disabled]="bookingForm.invalid || submitting" 
+                    class="py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 disabled:bg-slate-200 disabled:cursor-not-allowed transition-all shadow-lg">
+                    @if (submitting) {
+                      <span>Envoi en cours...</span>
+                    } @else {
+                      <span>Envoyer la demande</span>
+                    }
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
