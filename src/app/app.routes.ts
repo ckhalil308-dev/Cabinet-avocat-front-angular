@@ -19,7 +19,7 @@ import { MesRdv } from './secretaire/mes-rdv/mes-rdv';
 import { MesRdvClient } from './client/mes-rdvs/mes-rdvs';
 
     export const routes: Routes = [
-        { path:"home", title:"Home" , component:Accueil ,}
+        { path:"home", title:"Home" , component:Accueil ,canActivate: [guestGuard] }
         ,
         { path:"login", title:"Login" ,component:LoginComponent ,canActivate:[guestGuard]} ,
         { path:"register", title:"Register" ,component:Register,canActivate:[guestGuard]} ,
@@ -56,6 +56,7 @@ import { MesRdvClient } from './client/mes-rdvs/mes-rdvs';
     
     },
     
-        { path:"", redirectTo:"home", pathMatch:"full" }
+        { path:"", redirectTo:"home", pathMatch:"full" },
+        { path: "**", redirectTo: "home" }
 
     ];
