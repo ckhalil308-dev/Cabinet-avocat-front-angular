@@ -2,5 +2,5 @@
         production: false,
         // apiUrl: 'http://localhost:8081/api'
         //  apiUrl: 'https://springbootbackend-cabinet-avocat-7.onrender.com/api'
-        apiUrl: 'http://springbootbackend-cabinet-avocat.railway.internal/api'
+        apiUrl: 'https://springbootbackend-cabinet-avocat-production.up.railway.app/api'
     };
