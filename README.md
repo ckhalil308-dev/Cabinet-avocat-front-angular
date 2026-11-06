@@ -1,59 +1,73 @@
-# FrontCabinetAvocat
+# Legal Cabinet Management Platform - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.1.
+The official Angular frontend for the **Legal Cabinet Management Platform**, custom-built for lawyer Mahassen Saïdane's office. It provides a clean, professional dashboard for managing client appointments, tracking court hearings, organizing case files, and handling client onboarding verifications.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Key Features
 
-```bash
+* **Dashboard & Analytics:** Overview of upcoming court hearings, active cases, and consultation schedules.
+* **Appointment Slot Scheduling:** Interactive calendar and booking interface for client consultations.
+* **Court Hearing Tracker:** Real-time tracking of court dates, statuses, and case timelines.
+* **Case & Client Management:** Detailed views for organizing legal files, client documentation, and verification statuses.
+* **Role-Based Access Control:** Secure views tailored for lawyers, administrative staff, and clients.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework:** Angular (v20+)
+* **Styling:** Tailwind CSS / Modern UI components
+* **Routing & Guards:** Angular Router with reactive authentication guards
+* **HTTP Client:** Angular HttpClient with RxJS for reactive data streams
+
+---
+
+## 📁 Project Structure
+
+```text
+cabinet-law-frontend/
+├── public/               # Static assets & logos
+├── src/
+│   ├── app/
+│   │   ├── core/         # Interceptors, guards, and global services
+│   │   ├── features/     # Feature modules (cases, appointments, hearings, clients)
+│   │   ├── shared/       # Reusable UI components, pipes, and directives
+│   │   ├── app.component.ts
+│   │   └── app.routes.ts
+│   ├── assets/           # Images, fonts, and styles
+│   └── main.ts           # Application entry point
+├── .env.example          # Sample environment configuration
+├── angular.json          # Angular CLI configuration
+├── package.json          # Dependencies and scripts
+└── README.md             # Frontend documentation
+
+⚙️ Getting Started & How to Run
+Prerequisites
+Make sure you have Node.js (v18+) and npm installed on your machine.
+
+1. Clone the Repository
+Bash
+git clone [https://github.com/your-username/cabinet-law-frontend.git](https://github.com/your-username/cabinet-law-frontend.git)
+cd cabinet-law-frontend
+2. Install Dependencies
+Bash
+npm install
+3. Configure Environment Variables
+Create a environment configuration file (e.g., src/environments/environment.development.ts):
+
+TypeScript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+4. Run the Development Server
+Bash
 ng serve
-```
+The application will be accessible at http://localhost:4200.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+📦 Build for Production
+To compile the optimized production bundle:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Bash
+ng build --configuration production
